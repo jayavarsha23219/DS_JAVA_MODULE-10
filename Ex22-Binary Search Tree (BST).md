@@ -1,76 +1,72 @@
-# Ex22 Searching for a Book ID in a Binary Search Tree (BST)
+# Ex23 Breadth-First Search (BFS) Traversal of a City Junction Map
 
 ## AIM:
-To design and implement a Python program that constructs a Binary Search Tree (BST) using given Book IDs and checks whether a specific Book ID exists in the BST.
+To design and implement a Python program to perform Breadth-First Search (BFS) traversal on a city’s junction map represented as a graph, and find all reachable locations from a given source junction.
 ## Algorithm
 1. Start the program.
-2. Define a Node class with data, left, and right references.
-3. Create an insert() function to insert nodes into the BST following BST rules.
-4. Create a search() function to find a Book ID in the BST.
-5. Build the BST using given Book IDs.
-6. Search for a specific Book ID entered by the user.
-7. Display whether the Book ID exists in the tree.
-8. End the program.
-   
+2. Read the number of junctions (vertices) and roads (edges).
+3. Build an adjacency list to represent the graph.
+4. Read the source junction.
+5. Use a queue and a visited array to perform BFS.
+6. Print the order of traversal showing all reachable junctions.
+7. Stop the program. 
+ 
 
 ## Program:
 ```
 /*
-Program to construct a Binary Search Tree (BST) using given Book IDs 
-and check whether a specific Book ID exists in the BST.
+Program to perform Breadth-First Search (BFS) traversal on a city's junction map represented as a graph
 
 */
+
 import java.util.*;
 
-class Node {
-    int data;
-    Node left, right;
-    Node(int data) {
-        this.data = data;
-        left = right = null;
-    }
-}
+public class BFSJunctionMap {
+    static void bfsTraversal(Map<Integer, List<Integer>> graph, int src, int n) {
+        boolean[] visited = new boolean[n];
+        Queue<Integer> queue = new LinkedList<>();
 
-public class BookSearchBST {
-    public static Node insert(Node root, int data) {
-        if (root == null)
-            return new Node(data);
-        if (data < root.data)
-            root.left = insert(root.left, data);
-        else if (data > root.data)
-            root.right = insert(root.right, data);
-        return root;
-    }
+        visited[src] = true;
+        queue.add(src);
 
-    public static boolean search(Node root, int key) {
-        if (root == null)
-            return false;
-        if (root.data == key)
-            return true;
-        if (key < root.data)
-            return search(root.left, key);
-        else
-            return search(root.right, key);
+        System.out.print("BFS Traversal (reachable junctions): ");
+        while (!queue.isEmpty()) {
+            int node = queue.poll();
+            System.out.print(node + " ");
+
+            for (int neighbor : graph.get(node)) {
+                if (!visited[neighbor]) {
+                    visited[neighbor] = true;
+                    queue.add(neighbor);
+                }
+            }
+        }
     }
 
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
-        Node root = null;
-        System.out.print("Enter number of Book IDs: ");
+        System.out.print("Enter number of junctions (nodes): ");
         int n = sc.nextInt();
-        System.out.println("Enter Book IDs:");
-        for (int i = 0; i < n; i++) {
-            int id = sc.nextInt();
-            root = insert(root, id);
+
+        System.out.print("Enter number of roads (edges): ");
+        int e = sc.nextInt();
+
+        Map<Integer, List<Integer>> graph = new HashMap<>();
+        for (int i = 0; i < n; i++)
+            graph.put(i, new ArrayList<>());
+
+        System.out.println("Enter the roads (u v) with 0-based indices:");
+        for (int i = 0; i < e; i++) {
+            int u = sc.nextInt();
+            int v = sc.nextInt();
+            graph.get(u).add(v);
+            graph.get(v).add(u); // Undirected graph
         }
 
-        System.out.print("Enter Book ID to search: ");
-        int key = sc.nextInt();
+        System.out.print("Enter source junction (0-based): ");
+        int src = sc.nextInt();
 
-        if (search(root, key))
-            System.out.println("Book ID found in the library system.");
-        else
-            System.out.println("Book ID not found in the library system.");
+        bfsTraversal(graph, src, n);
         sc.close();
     }
 }  
@@ -78,10 +74,10 @@ public class BookSearchBST {
 ```
 
 ## Output:
-<img width="580" height="154" alt="image" src="https://github.com/user-attachments/assets/db2bb188-7daf-4b6c-b0bf-c4afeecfb698" />
 
 
+<img width="507" height="320" alt="image" src="https://github.com/user-attachments/assets/e0ce1da3-50f3-4744-aa82-814a1221c2d0" />
 
 ## Result:
 The program has been successfully implemented and executed.
-It constructs a Binary Search Tree from the given Book IDs and accurately determines whether a queried Book ID exists in the library system.
+It performs Breadth-First Search (BFS) traversal on a city junction map and correctly lists all reachable locations from the given source node.
